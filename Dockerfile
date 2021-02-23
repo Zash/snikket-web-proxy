@@ -8,9 +8,11 @@ VOLUME ["/snikket"]
 ENTRYPOINT ["/usr/bin/tini"]
 CMD ["/bin/sh", "/entrypoint.sh"]
 
+HEALTHCHECK CMD nc -zv 127.0.0.1 ${SNIKKET_TWEAK_HTTPS_PORT}
+
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        tini nginx supervisor gettext-base libjs-bootstrap4 libjs-jquery \
+        tini nginx supervisor gettext-base libjs-bootstrap4 libjs-jquery netcat \
     && rm /etc/nginx/sites-enabled/default \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get autoremove -y \
